@@ -5,8 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -124,6 +129,43 @@ public class FileChannelTest {
 				} catch (IOException e) {
 				}
 			}
+		}
+	}
+	
+	@Test
+	public void viaWebAccess() throws IOException {
+		try {
+			URL url = new URL("http://www.baidu.com");
+			
+			InputStream input = null;
+			try {
+				input = url.openStream();
+				ReadableByteChannel readChannel = Channels.newChannel(input);
+				
+				String outputPath = FileChannelTest.class.getResource("").getPath() + "data/baidu.html";
+				File outFile = new File(outputPath);
+				if (outFile.exists()) {
+					outFile.delete();
+				}
+				outFile.createNewFile();
+				
+				FileOutputStream output = null;
+				try {
+					output = new FileOutputStream(outFile);
+					output.getChannel().transferFrom(readChannel, 0, Integer.MAX_VALUE);
+				} finally {
+					if (null != output) {
+						output.close();
+					}
+				}
+			} finally {
+				if (null != input) {
+					input.close();
+				}
+			}
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		}
 	}
 	
