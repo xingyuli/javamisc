@@ -55,6 +55,41 @@ public class FileChannelTest {
 	}
 	
 	@Test
+	public void testReadWhenIKnowMoreAboutBufferAndChannel() {
+		String path = FileChannelTest.class.getResource("").getPath() + "data/nio-data-read.txt";
+		
+		FileInputStream inStream = null;
+		try {
+			inStream = new FileInputStream(path);
+			FileChannel inChannel = inStream.getChannel();
+			
+			ByteBuffer buffer = ByteBuffer.allocate(1024);
+			byte[] buff = new byte[1024];
+			StringBuilder content = new StringBuilder();
+			while (inChannel.read(buffer) > 0) {
+				buffer.flip();
+				buffer.get(buff, 0, buffer.limit());
+				
+				content.append(new String(buff, 0, buffer.limit()));
+				buffer.clear();
+			}
+			System.out.println(content);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != inStream) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+	
+	@Test
 	public void testWrite() {
 		String path = FileChannelTest.class.getResource("").getPath() + "data/nio-data-write.txt";
 		File f = new File(path);
