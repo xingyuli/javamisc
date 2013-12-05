@@ -1,3 +1,4 @@
+package org.swordess.javamisc.jdk7;
 
 
 import static junit.framework.Assert.assertTrue;
