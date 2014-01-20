@@ -12,78 +12,105 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
+import org.swordess.javamisc.Boundary;
+import org.swordess.javamisc.EquivalentCondition.Condition;
+import org.swordess.javamisc.Cover;
+import org.swordess.javamisc.EquivalentCondition;
+import org.swordess.javamisc.TestCaseAnalysis;
+import org.swordess.javamisc.TestCaseAnalysis.MethodAnalysis;
 import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 
+@TestCaseAnalysis({
+	@MethodAnalysis(
+		method = "InputStreamProvider(String)",
+		equivalentConditions = {
+			@EquivalentCondition(
+				name    = "path of the file",
+				valid   = @Condition(nbr = 1, desc = "non-empty string"),
+				invalid = {
+					@Condition(nbr = 2, desc = "null"),
+					@Condition(nbr = 3, desc = "''"),
+					@Condition(nbr = 4, desc = "' '"),
+				}
+			),
+			@EquivalentCondition(
+				name    = "whether file exist",
+				valid   = @Condition(nbr = 5, desc = "yes"),
+				invalid = @Condition(nbr = 6, desc = "no")
+			)
+		},
+		boundaries = {
+			@Boundary(nbr = 1, desc = "null"),
+			@Boundary(nbr = 2, desc = "''"),
+			@Boundary(nbr = 3, desc = "' '"),
+		}
+	),
+	@MethodAnalysis(
+		method = "usedBy(InputStreamUser)",
+		equivalentConditions = {
+			@EquivalentCondition(
+				name    = "user of stream",
+				valid   = @Condition(nbr = 1, desc = "non-null"),
+				invalid = @Condition(nbr = 2, desc = "null")
+			)
+		},
+		boundaries = {
+			@Boundary(nbr = 1, desc = "user of null"),
+			@Boundary(nbr = 2, desc = "user closed the stream")
+		}
+	),
+	@MethodAnalysis(
+		method = "usedBy(Collection<InputStreamUser>)",
+		equivalentConditions = {
+			@EquivalentCondition(
+				name    = "users of stream",
+				valid   = @Condition(nbr = 1, desc = "non-null"),
+				invalid = @Condition(nbr = 2, desc = "null")
+			)
+		},
+		boundaries = {
+			@Boundary(nbr = 1, desc = "users of null"),
+			@Boundary(nbr = 2, desc = "users with empty elements"),
+			@Boundary(nbr = 3, desc = "users with null elements")
+		}
+	)
+})
 public class InputStreamProviderTest {
 
-	/*
-	 * constructor - InputStreamProvider(String)
-	 * 
-	 * # Equivalent Conditions(EC):
-	 * External Condition  Valid EC             Invalid EC
-	 * ------------------  -------------------  ----------------------
-	 * path of the file    non-empty string(1)  null(2), ""(3), " "(4)
-	 * whether file exist  yes(5)               no(6)
-	 * 
-	 * # Boundary Analyze
-	 * path of null(b1)
-	 * path of ""(b2)
-	 * path of " "(b3)
-	 * 
-	 * # TestCase
-	 * TC1: 1(5)  - non-empty and exist
-	 * TC2: 2(b1) - null
-	 * TC3: 3(b2) - ""
-	 * TC4: 4(b3) - " "
-	 * TC5: 6     - non-empty but not exist
-	 */
+	private static int ACTUAL_INVOKE_NUMBER = 0;
 	
+	@Cover(validECs = {1,5})
 	@Test
 	public void instantiateInputStreamProvider1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("tc1.tmp"));
 		assertNotNull(provider);
 	}
-
+	
+	@Cover(invalidECs = 2, boundaries = 1)
 	@Test(expected = IllegalArgumentException.class)
 	public void instantiateInputStreamProvider2() throws FileNotFoundException {
 		new InputStreamProvider(null);
 	}
 	
+	@Cover(invalidECs = 3, boundaries = 2)
 	@Test(expected = IllegalArgumentException.class)
 	public void instantiateInputStreamProvider3() throws FileNotFoundException {
 		new InputStreamProvider("");
 	}
 	
+	@Cover(invalidECs = 4, boundaries = 3)
 	@Test(expected = IllegalArgumentException.class)
 	public void instantiateInputStreamProvider4() throws FileNotFoundException {
 		new InputStreamProvider(" ");
 	}
 	
+	@Cover(invalidECs = 6)
 	@Test(expected = FileNotFoundException.class)
 	public void instantiateInputStreamProvider5() throws FileNotFoundException {
 		new InputStreamProvider(FileUtil.ensureNonExistence("tc5.tmp"));
 	}
 	
-	/*
-	 * InputStreamProvider#usedBy(InputStreamUser)
-	 * 
-	 * # Equivalent Conditions
-	 * External Condition  Valid EC     Invalid EC
-	 * ------------------  -----------  ----------
-	 * user of stream      non-null(1)  null(2)
-	 * 
-	 * # Boundary Analyze
-	 * user of null(b1)
-	 * user closed the stream(b2)
-	 * 
-	 * # TestCase
-	 * TC1: 1     - non-null user and didn't close the stream
-	 * TC2: 2(b1) - null user
-	 * TC3: b2    - non-null user and close the stream explicitly
-	 */
-	
-	/* ******************* cover Valid EC start ******************* */
-	
+	@Cover(validECs = 1)
 	@Test
 	public void usedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy1.tmp"));
@@ -95,16 +122,14 @@ public class InputStreamProviderTest {
 		});
 	}
 	
-	/* ******************* cover Valid EC end ******************* */
-
-	/* ******************* cover Invalid EC start ******************* */
-	
+	@Cover(invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
 	public void usedBy2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy2.tmp"));
 		provider.usedBy((InputStreamUser)null);
 	}
 	
+	@Cover(boundaries = 2)
 	@Test
 	public void usedBy3() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy3.tmp"));
@@ -117,35 +142,7 @@ public class InputStreamProviderTest {
 		});
 	}
 
-	/* ******************* cover Invalid EC end ******************* */
-	
-	/*
-	 * InputStreamProvider#usedBy(Collection<InputStreamUser>)
-	 * 
-	 * # Equivelent Condition
-	 * External Condition  Valid EC  Invalid EC
-	 * ------------------  --------  ----------
-	 * users of stream     non-null(1)  null(2)
-	 * 
-	 * # Boundary Analyze
-	 * users of null(b1)
-	 * users with empty elements(b2)
-	 * users with null elements(b3)
-	 * 
-	 * # TestCase
-	 * TC1: 1     - non-null users and with non-null elements
-	 * TC2: 2(b1) - null users
-	 * TC3: b2    - non-null users and with empty elements
-	 * TC4: b3    - non-null users and with null elements
-	 * 
-	 * According to the specification, we need to verify whether the clients be
-	 * used in sequential order. But we can use the TC1 to do this work.
-	 */
-
-	private static int ACTUAL_INVOKE_NUMBER = 0;
-	
-	/* ******************* cover Valid EC start ******************* */
-	
+	@Cover(validECs = 1)
 	@Test
 	public void usedBySeveralUsers1() throws FileNotFoundException {
 		Collection<RecordableStreamUser> users = new ArrayList<RecordableStreamUser>();
@@ -169,22 +166,21 @@ public class InputStreamProviderTest {
 		}
 	}
 	
-	/* ******************* cover Valid EC end ******************* */
-	
-	/* ******************* cover Invalid EC start ******************* */
-	
+	@Cover(invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
 	public void usedBySeveralUsers2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers2.tmp"));
 		provider.usedBy((Collection<InputStreamUser>)null);
 	}
 	
+	@Cover(boundaries = 2)
 	@Test
 	public void usedBySeveralUsers3() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers3.tmp"));
 		provider.usedBy(Collections.<InputStreamUser>emptySet());
 	}
 	
+	@Cover(boundaries = 3)
 	@Test
 	public void usedBySeveralUsers4() throws FileNotFoundException {
 		List<InputStreamUser> usersWithNullElements = new ArrayList<InputStreamUser>(16);
@@ -193,8 +189,6 @@ public class InputStreamProviderTest {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers4.tmp"));
 		provider.usedBy(usersWithNullElements);
 	}
-	
-	/* ******************* cover Invalid EC end ******************* */
 	
 	private static class RecordableStreamUser implements InputStreamUser {
 
