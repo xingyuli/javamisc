@@ -1,6 +1,7 @@
 package org.swordess.javamisc.io;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,16 +10,50 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
+
 public class InputStreamProvider {
 
 	private static final Logger LOG = Logger.getLogger("input-stream-provider");
 	
 	private final String path;
 	
-	public InputStreamProvider(String path) {
+	/**
+	 * Constructs a stream provided with the given file path.
+	 * 
+	 * @param path
+	 *            path of the file, should not be null or empty string
+	 * @throws IllegalArgumentException
+	 *             if the path is not valid
+	 */
+	public InputStreamProvider(String path) throws FileNotFoundException {
+		if (StringUtils.isBlank(path)) {
+			throw new IllegalArgumentException("path should be non-empty string");
+		}
+		if (!new File(path).exists()) {
+			throw new FileNotFoundException(path);
+		}
 		this.path = path;
 	}
 	
+	/**
+	 * Consume the stream which provided by this InputStreamProvider with the
+	 * specified user(client).
+	 * <p>
+	 * NOTE:
+	 * <ul>
+	 * <li>
+	 * This method closes the stream implicitly which means the user(client) can
+	 * leave the stream open safely in its code.</li>
+	 * <li>
+	 * This method handles correctly even if the user(client) choose to close
+	 * the stream by itself.</li>
+	 * </ul>
+	 * 
+	 * @param inUser
+	 *            the user(client) who want to use the stream, should not be
+	 *            null
+	 */
 	public void usedBy(InputStreamUser inUser) {
 		InputStream in = null;
 		try {
@@ -42,7 +77,18 @@ public class InputStreamProvider {
 		}
 	}
 	
-	public void usedBy(Collection<InputStreamUser> inUsers) {
+	/**
+	 * Consume the stream which provided by this InputStreamProvider with the
+	 * specified users(clients). The users(clients) will be used sequentially
+	 * according to the iteration order.
+	 * 
+	 * @see #usedBy(Collection)
+	 * 
+	 * @param inUsers
+	 *            the users(clients) who want to use the stream, should not be
+	 *            null
+	 */
+	public void usedBy(Collection<? extends InputStreamUser> inUsers) {
 		BufferedInputStream in  = null;
 		try {
 			LOG.log(Level.INFO, "opening BufferedInputStream for " + path + " ...");

@@ -1,6 +1,7 @@
 package org.swordess.javamisc.io;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,13 +14,13 @@ import org.junit.Test;
 public class InputStreamTest {
 
 	@Test
-	public void testUsedByOneUser() {
+	public void testUsedByOneUser() throws FileNotFoundException {
 		InputStreamProvider inProvider = new InputStreamProvider(absolutePathOf("io-read.txt"));
 		inProvider.usedBy(new LineNumberedUser());
 	}
 	
 	@Test
-	public void testUsedByMultipleUsers() {
+	public void testUsedByMultipleUsers() throws FileNotFoundException {
 		Collection<InputStreamUser> inUsers = new ArrayList<InputStreamUser>();
 		inUsers.add(new LineNumberedUser());
 		inUsers.add(new InputStreamUser() {
