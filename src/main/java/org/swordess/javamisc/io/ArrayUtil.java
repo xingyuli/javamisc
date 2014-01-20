@@ -12,9 +12,11 @@ public class ArrayUtil {
 	 * respectively. The number of elements to be compared is specified by the
 	 * <code>length</code>.
 	 * <p>
-	 * Note that two <tt>null</tt> arrays are considered equal, but of only one
-	 * of them is <tt>null</tt> while the other one is not <tt>null</tt> are
-	 * considered not equal.
+	 * NOTE:
+	 * <ul>
+	 * <li>two <tt>null</tt> arrays are considered equal</li>
+	 * <li>two empty arrays are considered equal</li>
+	 * </ul>
 	 * 
 	 * @param src
 	 *            the source array, can be null
@@ -31,7 +33,7 @@ public class ArrayUtil {
 	 *             if {@literal srcOffset < 0 || srcOffset >= src.length} or
 	 *             {@literal destOffset < 0 || destOffset >= dest.length}
 	 * @throws IllegalArgumentException
-	 *             if {@literal length < 0} or
+	 *             if {@literal length <= 0} or
 	 *             {@literal srcOffset + length > src.length} or
 	 *             {@literal destOffset + length > dest.length}
 	 */
@@ -41,16 +43,26 @@ public class ArrayUtil {
 		if (null == src && null == dest) {
 			return true;
 		}
-		
 		if (null == src || null == dest) {
 			return false;
 		}
 
+		if (src.length == 0 && dest.length == 0) {
+			return true;
+		}
+		if (src.length == 0 || dest.length == 0) {
+			return false;
+		}
+		
 		if (srcOffset < 0 || srcOffset >= src.length) {
 			throw new ArrayIndexOutOfBoundsException(srcOffset);
 		}
 		if (destOffset < 0 || destOffset >= dest.length) {
 			throw new ArrayIndexOutOfBoundsException(destOffset);
+		}
+		
+		if (length <= 0) {
+			throw new IllegalArgumentException("length should be larger than 0");
 		}
 		
 		if (srcOffset + length > src.length) {
