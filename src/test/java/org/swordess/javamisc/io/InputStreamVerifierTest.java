@@ -28,10 +28,16 @@ public class InputStreamVerifierTest {
 	 * TC3: 3(b2) - empty bytes
 	 */
 
+	/* ******************* cover Valid EC start ******************* */
+	
 	@Test
 	public void instantiateInputStreamVerifier1() {
 		new InputStreamVerifier(new byte[] { 1 });
 	}
+	
+	/* ******************* cover Valid EC end ******************* */
+	
+	/* ******************* cover Invalid EC start ******************* */
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void instantiateInputStreamVerifier2() {
@@ -42,6 +48,8 @@ public class InputStreamVerifierTest {
 	public void instantiateInputStreamVerifier3() {
 		new InputStreamVerifier(new byte[0]);
 	}
+	
+	/* ******************* cover Invalid EC end ******************* */
 	
 	/*
 	 * InputStreamVerifier#use(InputStream)
@@ -66,6 +74,8 @@ public class InputStreamVerifierTest {
 	 *      mentioned in the constructor
 	 */
 	
+	/* ******************* cover Valid EC start ******************* */
+	
 	@Test
 	public void use1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("use1.tmp"));
@@ -73,6 +83,10 @@ public class InputStreamVerifierTest {
 		provider.usedBy(verifier);
 		assertTrue(verifier.isMatched());
 	}
+	
+	/* ******************* cover Valid EC end ******************* */
+	
+	/* ******************* cover Invalid EC start ******************* */
 	
 	@Test
 	public void use2() throws IOException {
@@ -91,6 +105,10 @@ public class InputStreamVerifierTest {
 		provider.usedBy(verifier);
 		assertTrue(verifier.isMatched());
 	}
+	
+	/* ******************* cover Invalid EC end ******************* */
+	
+	/* ******************* cover additional ******************* */
 	
 	@Test
 	public void use4() throws IOException {

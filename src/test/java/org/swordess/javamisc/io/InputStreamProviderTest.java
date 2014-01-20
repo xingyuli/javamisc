@@ -82,6 +82,8 @@ public class InputStreamProviderTest {
 	 * TC3: b2    - non-null user and close the stream explicitly
 	 */
 	
+	/* ******************* cover Valid EC start ******************* */
+	
 	@Test
 	public void usedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy1.tmp"));
@@ -92,7 +94,11 @@ public class InputStreamProviderTest {
 			}
 		});
 	}
+	
+	/* ******************* cover Valid EC end ******************* */
 
+	/* ******************* cover Invalid EC start ******************* */
+	
 	@Test(expected = NullPointerException.class)
 	public void usedBy2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy2.tmp"));
@@ -110,6 +116,8 @@ public class InputStreamProviderTest {
 			}
 		});
 	}
+
+	/* ******************* cover Invalid EC end ******************* */
 	
 	/*
 	 * InputStreamProvider#usedBy(Collection<InputStreamUser>)
@@ -136,6 +144,8 @@ public class InputStreamProviderTest {
 
 	private static int ACTUAL_INVOKE_NUMBER = 0;
 	
+	/* ******************* cover Valid EC start ******************* */
+	
 	@Test
 	public void usedBySeveralUsers1() throws FileNotFoundException {
 		Collection<RecordableStreamUser> users = new ArrayList<RecordableStreamUser>();
@@ -159,6 +169,10 @@ public class InputStreamProviderTest {
 		}
 	}
 	
+	/* ******************* cover Valid EC end ******************* */
+	
+	/* ******************* cover Invalid EC start ******************* */
+	
 	@Test(expected = NullPointerException.class)
 	public void usedBySeveralUsers2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers2.tmp"));
@@ -179,6 +193,8 @@ public class InputStreamProviderTest {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers4.tmp"));
 		provider.usedBy(usersWithNullElements);
 	}
+	
+	/* ******************* cover Invalid EC end ******************* */
 	
 	private static class RecordableStreamUser implements InputStreamUser {
 
