@@ -1,8 +1,8 @@
 package org.swordess.javamisc.io;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
+import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 
 public class InputStreamProviderTest {
 
@@ -39,7 +40,7 @@ public class InputStreamProviderTest {
 	
 	@Test
 	public void instantiateInputStreamProvider1() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("tc1.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("tc1.tmp"));
 		assertNotNull(provider);
 	}
 
@@ -60,7 +61,7 @@ public class InputStreamProviderTest {
 	
 	@Test(expected = FileNotFoundException.class)
 	public void instantiateInputStreamProvider5() throws FileNotFoundException {
-		new InputStreamProvider(notExistedPath("tc5.tmp"));
+		new InputStreamProvider(FileUtil.ensureNonExistence("tc5.tmp"));
 	}
 	
 	/*
@@ -83,7 +84,7 @@ public class InputStreamProviderTest {
 	
 	@Test
 	public void usedBy1() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBy1.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy1.tmp"));
 		provider.usedBy(new InputStreamUser() {
 			@Override
 			public void use(InputStream in) throws IOException {
@@ -94,13 +95,13 @@ public class InputStreamProviderTest {
 
 	@Test(expected = NullPointerException.class)
 	public void usedBy2() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBy2.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy2.tmp"));
 		provider.usedBy((InputStreamUser)null);
 	}
 	
 	@Test
 	public void usedBy3() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBy3.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy3.tmp"));
 		provider.usedBy(new InputStreamUser() {
 			@Override
 			public void use(InputStream in) throws IOException {
@@ -149,7 +150,7 @@ public class InputStreamProviderTest {
 			user.setExpectedInvokeNumber(++iterationOrder);
 		}
 		
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBySeveralUsers1.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers1.tmp"));
 		provider.usedBy(users);
 		
 		// verify the invoke number for each stream user
@@ -160,13 +161,13 @@ public class InputStreamProviderTest {
 	
 	@Test(expected = NullPointerException.class)
 	public void usedBySeveralUsers2() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBySeveralUsers2.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers2.tmp"));
 		provider.usedBy((Collection<InputStreamUser>)null);
 	}
 	
 	@Test
 	public void usedBySeveralUsers3() throws FileNotFoundException {
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBySeveralUsers3.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers3.tmp"));
 		provider.usedBy(Collections.<InputStreamUser>emptySet());
 	}
 	
@@ -175,7 +176,7 @@ public class InputStreamProviderTest {
 		List<InputStreamUser> usersWithNullElements = new ArrayList<InputStreamUser>(16);
 		Collections.fill(usersWithNullElements, null);
 		
-		InputStreamProvider provider = new InputStreamProvider(existedPath("usedBySeveralUsers4.tmp"));
+		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers4.tmp"));
 		provider.usedBy(usersWithNullElements);
 	}
 	
@@ -201,26 +202,6 @@ public class InputStreamProviderTest {
 			return actualInvokeNumber;
 		}
 		
-	}
-	
-	private String existedPath(String filename) {
-		File file = new File(filename);
-		if(!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-			}
-		}
-		file.deleteOnExit();
-		return file.getAbsolutePath();
-	}
-	
-	private String notExistedPath(String filename) {
-		File file = new File(filename);
-		if (file.exists()) {
-			file.delete();
-		}
-		return file.getAbsolutePath();
 	}
 	
 }

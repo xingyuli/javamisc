@@ -9,8 +9,18 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 
+/**
+ * This group of tests is useless because we've already have more powerful
+ * {@link InputStreamProviderTest} and {@link InputStreamVerifierTest} are
+ * available.
+ * 
+ * @author Liu Xingyu <xingyulliiuu@gmail.com>
+ */
+@Ignore
 public class InputStreamTest {
 
 	@Test

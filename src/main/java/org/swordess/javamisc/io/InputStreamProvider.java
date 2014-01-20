@@ -116,4 +116,25 @@ public class InputStreamProvider {
 		}
 	}
 	
+	public String getPath() {
+		return path;
+	}
+	
+	/**
+	 * Indicates a client to use a certain InputStream. This client has no
+	 * responsibility to close the stream passed in as it will always be closed
+	 * by {@link InputStreamProvider}. 
+	 */
+	public static interface InputStreamUser {
+
+		/**
+		 * Specify how to use the stream passed in.
+		 * 
+		 * @param in
+		 * @throws IOException
+		 */
+		public void use(InputStream in) throws IOException;
+		
+	}
+	
 }
