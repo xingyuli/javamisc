@@ -1,9 +1,9 @@
-package org.swordess.javamisc;
+package org.swordess.test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EquivalentCondition {
 	
 	public String name();

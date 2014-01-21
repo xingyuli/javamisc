@@ -1,20 +1,22 @@
 package org.swordess.javamisc.io;
 
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.swordess.javamisc.Boundary;
-import org.swordess.javamisc.Cover;
-import org.swordess.javamisc.EquivalentCondition;
-import org.swordess.javamisc.EquivalentCondition.Condition;
-import org.swordess.javamisc.TestCaseAnalysis.MethodAnalysis;
-import org.swordess.javamisc.TestCaseAnalysis;
+import org.swordess.test.Boundary;
+import org.swordess.test.Cover;
+import org.swordess.test.CoverChecker;
+import org.swordess.test.EquivalentCondition;
+import org.swordess.test.EquivalentCondition.Condition;
+import org.swordess.test.TestCaseAnalysis;
+import org.swordess.test.TestCaseAnalysis.MethodAnalysis;
 
 @TestCaseAnalysis({
 	@MethodAnalysis(
-		method = "equals(byte[], int, byte[], int, int)",
+		signature = ArrayUtilTest.SIGNATURE_EQUALS,
 		equivalentConditions = {
 			@EquivalentCondition(
 				name    = "source array",
@@ -88,87 +90,118 @@ import org.swordess.javamisc.TestCaseAnalysis;
 		}
 	)
 })
+@RunWith(CoverChecker.class)
 public class ArrayUtilTest {
 	
-	@Cover(conditions = {"src = null", "dest = null"}, validECs = {1,5}, boundaries = {1,10})
+	static final String SIGNATURE_EQUALS = "equals(byte[], int, byte[], int, int)"; 
+	
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src = null", "dest = null"}, validECs = {1,5}, boundaries = {1,10})
 	@Test
 	public void testConditionEquals1() {
 		assertTrue(ArrayUtil.equals(null, anyInt(), null, anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src = null", "dest = any"}, boundaries = 11)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src = null", "dest = any"}, boundaries = 11)
 	@Test
 	public void testConditionEquals2() {
 		assertTrue(!ArrayUtil.equals(null, anyInt(), new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src = any not null", "dest = null"}, boundaries = 2)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src = any not null", "dest = null"}, boundaries = 2)
 	@Test
 	public void testConditionEquals3() {
 		assertTrue(!ArrayUtil.equals(new byte[0], anyInt(), null, anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src.length = 0", "dest.length = 0"})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src.length = 0", "dest.length = 0"})
 	@Test
 	public void testConditionEquals4() {
 		assertTrue(ArrayUtil.equals(new byte[0], anyInt(), new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src.length = 0", "dest.length > 0"}, validECs = 6, boundaries = {12,14,16})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src.length = 0", "dest.length > 0"}, validECs = 6, boundaries = {12,14,16})
 	@Test
 	public void testConditionEquals5() {
 		assertTrue(!ArrayUtil.equals(new byte[0], anyInt(), new byte[]{1}, 0, anyInt()));
 	}
 	
-	@Cover(conditions = {"src.length > 0", "dest.length = 0"}, validECs = 2, boundaries = {3,5,7})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = {"src.length > 0", "dest.length = 0"}, validECs = 2, boundaries = {3,5,7})
 	@Test
 	public void testConditionEquals6() {
 		assertTrue(!ArrayUtil.equals(new byte[]{1}, 0, new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = "srcOffset < 0", invalidECs = 3, boundaries = 4)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "srcOffset < 0", invalidECs = 3, boundaries = 4)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals7() {
 		ArrayUtil.equals(new byte[]{1}, -1, new byte[]{2}, 0, 1);
 	}
 	
-	@Cover(conditions = "srcOffset >= src.length", invalidECs = 4, boundaries = {6,8})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "srcOffset >= src.length", invalidECs = 4, boundaries = {6,8})
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals8() {
 		ArrayUtil.equals(new byte[]{1}, 1, new byte[]{2}, 0, 1);
 	}
 	
-	@Cover(conditions = "destOffset < 0", invalidECs = 7, boundaries = 13)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "destOffset < 0", invalidECs = 7, boundaries = 13)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals9() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, -1, 1);
 	}
 	
-	@Cover(conditions = "destOffset >= dest.length", invalidECs = 8, boundaries = {15,17})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "destOffset >= dest.length", invalidECs = 8, boundaries = {15,17})
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals10() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 1, 1);
 	}
 	
-	@Cover(conditions = "length <= 0", invalidECs = 12, boundaries = 20)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "length <= 0", invalidECs = 12, boundaries = 20)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals11() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 0, 0);
 	}
 	
-	@Cover(conditions = "srcOffset + length > src.length", invalidECs = 13, boundaries = 24)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "srcOffset + length > src.length", invalidECs = 13, boundaries = 24)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals12() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1,2}, 0, 2);
 	}
 	
-	@Cover(conditions = "destOffset + length > dest.length", invalidECs = 14, boundaries = 27)
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "destOffset + length > dest.length", invalidECs = 14, boundaries = 27)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals13() {
 		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{2}, 0, 2);
 	}
 	
-	@Cover(conditions = "src[i] != dest[i]", validECs = {9,10,11}, boundaries = {22,26,30})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "src[i] != dest[i]", validECs = {9,10,11}, boundaries = {22,26,30})
 	@Test
 	public void testConditionEquals14() {
 		assertTrue(!ArrayUtil.equals(
@@ -178,7 +211,9 @@ public class ArrayUtilTest {
 			));
 	}
 	
-	@Cover(conditions = "src[any] = dest[any]", boundaries = {23,25})
+	@Cover(
+		methodSignature = SIGNATURE_EQUALS,
+		conditions = "src[any] = dest[any]", boundaries = {23,25})
 	@Test
 	public void testConditionEquals15() {
 		assertTrue(ArrayUtil.equals(
@@ -188,32 +223,32 @@ public class ArrayUtilTest {
 			));
 	}
 	
-	@Cover(boundaries = 9)
+	@Cover(methodSignature = SIGNATURE_EQUALS, boundaries = 9)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testBoundaryEquals1() {
 		ArrayUtil.equals(new byte[]{1,2}, 3, new byte[]{1}, 0, 1);
 	}
 	
-	@Cover(boundaries = 18)
+	@Cover(methodSignature = SIGNATURE_EQUALS, boundaries = 18)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testBoundaryEquals2() {
 		ArrayUtil.equals(new byte[]{1}, 0, new byte[]{1,2}, 3, 1);
 	}
 	
-	@Cover(boundaries = 19)
+	@Cover(methodSignature = SIGNATURE_EQUALS, boundaries = 19)
 	@Test(expected = IllegalArgumentException.class)
 	public void testBoundaryEquals3() {
 		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{1,2}, 0, -1);
 		Mockito.anyInt();
 	}
 	
-	@Cover(boundaries = {21,28})
+	@Cover(methodSignature = SIGNATURE_EQUALS, boundaries = {21,28})
 	@Test
 	public void testBoundaryEquals4() {
 		assertTrue(!ArrayUtil.equals(new byte[]{1}, 0, new byte[2], 0, 1));
 	}
 	
-	@Cover(boundaries = 29)
+	@Cover(methodSignature = SIGNATURE_EQUALS, boundaries = {29})
 	@Test
 	public void testBoundaryEquals5() {
 		assertTrue(!ArrayUtil.equals(

@@ -27,15 +27,15 @@ class FileUtil {
 	}
 	
 	static void write(String filename, byte b) throws IOException {
-		FileOutputStream out = new FileOutputStream(filename);
-		out.write(b);
-		out.close();
+		try (FileOutputStream out = new FileOutputStream(filename)) {
+			out.write(b);
+		}
 	}
 	
 	static void write(String filename, byte[] b) throws IOException {
-		FileOutputStream out = new FileOutputStream(filename);
-		out.write(b);
-		out.close();
+		try (FileOutputStream out = new FileOutputStream(filename)) {
+			out.write(b);
+		}
 	}
 	
 	private FileUtil() {

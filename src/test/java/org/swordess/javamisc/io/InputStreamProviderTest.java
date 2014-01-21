@@ -12,17 +12,19 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
-import org.swordess.javamisc.Boundary;
-import org.swordess.javamisc.EquivalentCondition.Condition;
-import org.swordess.javamisc.Cover;
-import org.swordess.javamisc.EquivalentCondition;
-import org.swordess.javamisc.TestCaseAnalysis;
-import org.swordess.javamisc.TestCaseAnalysis.MethodAnalysis;
+import org.junit.runner.RunWith;
 import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
+import org.swordess.test.Boundary;
+import org.swordess.test.Cover;
+import org.swordess.test.EquivalentCondition;
+import org.swordess.test.TestCaseAnalysis;
+import org.swordess.test.EquivalentCondition.Condition;
+import org.swordess.test.TestCaseAnalysis.MethodAnalysis;
+import org.swordess.test.CoverChecker;
 
 @TestCaseAnalysis({
 	@MethodAnalysis(
-		method = "InputStreamProvider(String)",
+		signature = InputStreamProviderTest.SIGNATURE_INPUT_STREAM_PROVIDER,
 		equivalentConditions = {
 			@EquivalentCondition(
 				name    = "path of the file",
@@ -46,7 +48,7 @@ import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 		}
 	),
 	@MethodAnalysis(
-		method = "usedBy(InputStreamUser)",
+		signature = InputStreamProviderTest.SIGNATURE_USED_BY,
 		equivalentConditions = {
 			@EquivalentCondition(
 				name    = "user of stream",
@@ -60,7 +62,7 @@ import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 		}
 	),
 	@MethodAnalysis(
-		method = "usedBy(Collection<InputStreamUser>)",
+		signature = InputStreamProviderTest.SIGNATURE_USED_BY_COLLECTION,
 		equivalentConditions = {
 			@EquivalentCondition(
 				name    = "users of stream",
@@ -75,42 +77,51 @@ import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 		}
 	)
 })
+@RunWith(CoverChecker.class)
 public class InputStreamProviderTest {
 
+	static final String SIGNATURE_INPUT_STREAM_PROVIDER = "InputStreamProvider(String)";
+	static final String SIGNATURE_USED_BY = "usedBy(InputStreamUser)";
+	static final String SIGNATURE_USED_BY_COLLECTION = "usedBy(Collection<InputStreamUser>)";
+	
 	private static int ACTUAL_INVOKE_NUMBER = 0;
 	
-	@Cover(conditions = "StringUtils.isBlank(path)", invalidECs = 2, boundaries = 1)
+	@Cover(
+		methodSignature = SIGNATURE_INPUT_STREAM_PROVIDER,
+		conditions = "StringUtils.isBlank(path)", invalidECs = 2, boundaries = 1)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionInputStreamProvider1() throws FileNotFoundException {
 		new InputStreamProvider(null);
 	}
 	
-	@Cover(conditions = "!new File(path).exist()", invalidECs = 6)
+	@Cover(
+		methodSignature = SIGNATURE_INPUT_STREAM_PROVIDER,
+		conditions = "!new File(path).exist()", invalidECs = 6)
 	@Test(expected = FileNotFoundException.class)
 	public void testConditionInputStreamProvider2() throws FileNotFoundException {
 		new InputStreamProvider(FileUtil.ensureNonExistence("tc5.tmp"));
 	}
 	
-	@Cover(validECs = {1,5})
+	@Cover(methodSignature = SIGNATURE_INPUT_STREAM_PROVIDER, validECs = {1,5})
 	@Test
 	public void testECInputStreamProvider1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("tc1.tmp"));
 		assertNotNull(provider);
 	}
 	
-	@Cover(invalidECs = 3, boundaries = 2)
+	@Cover(methodSignature = SIGNATURE_INPUT_STREAM_PROVIDER, invalidECs = 3, boundaries = 2)
 	@Test(expected = IllegalArgumentException.class)
 	public void testECInputStreamProvider2() throws FileNotFoundException {
 		new InputStreamProvider("");
 	}
 	
-	@Cover(invalidECs = 4, boundaries = 3)
+	@Cover(methodSignature = SIGNATURE_INPUT_STREAM_PROVIDER, invalidECs = 4, boundaries = 3)
 	@Test(expected = IllegalArgumentException.class)
 	public void testECInputStreamProvider3() throws FileNotFoundException {
 		new InputStreamProvider(" ");
 	}
 	
-	@Cover(validECs = 1)
+	@Cover(methodSignature = SIGNATURE_USED_BY, validECs = 1)
 	@Test
 	public void testECUsedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy1.tmp"));
@@ -122,14 +133,14 @@ public class InputStreamProviderTest {
 		});
 	}
 	
-	@Cover(invalidECs = 2, boundaries = 1)
+	@Cover(methodSignature = SIGNATURE_USED_BY, invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
 	public void testECUsedBy2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy2.tmp"));
 		provider.usedBy((InputStreamUser)null);
 	}
 	
-	@Cover(boundaries = 2)
+	@Cover(methodSignature = SIGNATURE_USED_BY, boundaries = 2)
 	@Test
 	public void testBoundaryUsedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy3.tmp"));
@@ -142,10 +153,10 @@ public class InputStreamProviderTest {
 		});
 	}
 
-	@Cover(validECs = 1)
+	@Cover(methodSignature = SIGNATURE_USED_BY_COLLECTION, validECs = 1)
 	@Test
 	public void testECUsedBySeveralUsers1() throws FileNotFoundException {
-		Collection<RecordableStreamUser> users = new ArrayList<RecordableStreamUser>();
+		Collection<RecordableStreamUser> users = new ArrayList<>();
 		users.add(new RecordableStreamUser());
 		users.add(new RecordableStreamUser());
 		users.add(new RecordableStreamUser());
@@ -166,24 +177,24 @@ public class InputStreamProviderTest {
 		}
 	}
 	
-	@Cover(invalidECs = 2, boundaries = 1)
+	@Cover(methodSignature = SIGNATURE_USED_BY_COLLECTION, invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
 	public void testECUsedBySeveralUsers2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers2.tmp"));
 		provider.usedBy((Collection<InputStreamUser>)null);
 	}
 	
-	@Cover(boundaries = 2)
+	@Cover(methodSignature = SIGNATURE_USED_BY_COLLECTION, boundaries = 2)
 	@Test
 	public void testBoundaryUsedBySeveralUsers1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers3.tmp"));
 		provider.usedBy(Collections.<InputStreamUser>emptySet());
 	}
 	
-	@Cover(boundaries = 3)
+	@Cover(methodSignature = SIGNATURE_USED_BY_COLLECTION, boundaries = 3)
 	@Test
 	public void testBoundaryUsedBySeveralUsers2() throws FileNotFoundException {
-		List<InputStreamUser> usersWithNullElements = new ArrayList<InputStreamUser>(16);
+		List<InputStreamUser> usersWithNullElements = new ArrayList<>(16);
 		Collections.fill(usersWithNullElements, null);
 		
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers4.tmp"));
