@@ -1,8 +1,10 @@
 package org.swordess.javamisc.io;
 
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.swordess.javamisc.Boundary;
 import org.swordess.javamisc.Cover;
 import org.swordess.javamisc.EquivalentCondition;
@@ -88,225 +90,137 @@ import org.swordess.javamisc.TestCaseAnalysis;
 })
 public class ArrayUtilTest {
 	
-	@Cover(conditions = {"src = null", "dest = null"})
+	@Cover(conditions = {"src = null", "dest = null"}, validECs = {1,5}, boundaries = {1,10})
 	@Test
 	public void testConditionEquals1() {
-		assertTrue(ArrayUtil.equals(null, -1, null, -1, -1));
+		assertTrue(ArrayUtil.equals(null, anyInt(), null, anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src = null", "dest = any"})
+	@Cover(conditions = {"src = null", "dest = any"}, boundaries = 11)
 	@Test
 	public void testConditionEquals2() {
-		assertTrue(!ArrayUtil.equals(null, -1, new byte[0], -1, -1));
+		assertTrue(!ArrayUtil.equals(null, anyInt(), new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src = any not null", "dest = null"})
+	@Cover(conditions = {"src = any not null", "dest = null"}, boundaries = 2)
 	@Test
 	public void testConditionEquals3() {
-		assertTrue(!ArrayUtil.equals(new byte[0], -1, null, -1, -1));
+		assertTrue(!ArrayUtil.equals(new byte[0], anyInt(), null, anyInt(), anyInt()));
 	}
 	
 	@Cover(conditions = {"src.length = 0", "dest.length = 0"})
 	@Test
 	public void testConditionEquals4() {
-		assertTrue(ArrayUtil.equals(new byte[0], -1, new byte[0], -1, -1));
+		assertTrue(ArrayUtil.equals(new byte[0], anyInt(), new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = {"src.length = 0", "dest.length > 0"})
+	@Cover(conditions = {"src.length = 0", "dest.length > 0"}, validECs = 6, boundaries = {12,14,16})
 	@Test
 	public void testConditionEquals5() {
-		assertTrue(!ArrayUtil.equals(new byte[0], -1, new byte[]{1}, 0, 1));
+		assertTrue(!ArrayUtil.equals(new byte[0], anyInt(), new byte[]{1}, 0, anyInt()));
 	}
 	
-	@Cover(conditions = {"src.length > 0", "dest.length = 0"})
+	@Cover(conditions = {"src.length > 0", "dest.length = 0"}, validECs = 2, boundaries = {3,5,7})
 	@Test
 	public void testConditionEquals6() {
-		assertTrue(!ArrayUtil.equals(new byte[]{1}, -1, new byte[0], 0, 1));
+		assertTrue(!ArrayUtil.equals(new byte[]{1}, 0, new byte[0], anyInt(), anyInt()));
 	}
 	
-	@Cover(conditions = "srcOffset < 0")
+	@Cover(conditions = "srcOffset < 0", invalidECs = 3, boundaries = 4)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals7() {
 		ArrayUtil.equals(new byte[]{1}, -1, new byte[]{2}, 0, 1);
 	}
 	
-	@Cover(conditions = "srcOffset >= src.length")
+	@Cover(conditions = "srcOffset >= src.length", invalidECs = 4, boundaries = {6,8})
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals8() {
 		ArrayUtil.equals(new byte[]{1}, 1, new byte[]{2}, 0, 1);
 	}
 	
-	@Cover(conditions = "destOffset < 0")
+	@Cover(conditions = "destOffset < 0", invalidECs = 7, boundaries = 13)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals9() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, -1, 1);
 	}
 	
-	@Cover(conditions = "destOffset >= dest.length")
+	@Cover(conditions = "destOffset >= dest.length", invalidECs = 8, boundaries = {15,17})
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testConditionEquals10() {
-		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 2, 1);
+		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 1, 1);
 	}
 	
-	@Cover(conditions = "length <= 0")
+	@Cover(conditions = "length <= 0", invalidECs = 12, boundaries = 20)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals11() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 0, 0);
 	}
 	
-	@Cover(conditions = "srcOffset + length > src.length")
+	@Cover(conditions = "srcOffset + length > src.length", invalidECs = 13, boundaries = 24)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals12() {
 		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1,2}, 0, 2);
 	}
 	
-	@Cover(conditions = "destOffset + length > dest.length")
+	@Cover(conditions = "destOffset + length > dest.length", invalidECs = 14, boundaries = 27)
 	@Test(expected = IllegalArgumentException.class)
 	public void testConditionEquals13() {
-		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{1}, 0, 2);
+		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{2}, 0, 2);
 	}
 	
-	@Cover(conditions = "src[i] != dest[i]")
+	@Cover(conditions = "src[i] != dest[i]", validECs = {9,10,11}, boundaries = {22,26,30})
 	@Test
 	public void testConditionEquals14() {
 		assertTrue(!ArrayUtil.equals(
 				new byte[]{1,1,2,3,5,8}, 1,
-				new byte[]{1,2,3,5,7,9,11}, 0,
+				new byte[]{1,2,3,5,7,9}, 0,
 				5
 			));
 	}
 	
-	@Cover(conditions = "src[any] = dest[any]")
+	@Cover(conditions = "src[any] = dest[any]", boundaries = {23,25})
 	@Test
 	public void testConditionEquals15() {
 		assertTrue(ArrayUtil.equals(
-				new byte[]{1,3,5,7,9}, 1,
-				new byte[]{1,2,3,5,7,9,11}, 2,
+				new byte[]{1,3,5,7,9,11}, 1,
+				new byte[]{1,2,3,5,7,9}, 2,
 				4
 			));
-	}
-	
-	@Cover(validECs = {1,2,5,6,9,10,11}, boundaries = {6,25,29})
-	@Test
-	public void equals1() {
-		assertTrue(!ArrayUtil.equals(
-				new byte[] { 1, 10, 20, 30 }, 1,
-				new byte[] { 1, 1, 2, 3, 5 }, 2,
-				2
-			));
-	}
-	
-	@Cover(invalidECs = 3, boundaries = 4)
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals2() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, -1,
-				new byte[] { 1, 1, 2, 3, 5 },    2,
-				3
-			);
-	}
-	
-	@Cover(invalidECs = 4, boundaries = 8)
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals3() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 6,
-				new byte[] { 1, 1, 2, 3, 5 },    2,
-				3
-			);
-	}
-	
-	@Cover(invalidECs = 7, boundaries = 13)
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals4() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 1,
-				new byte[] { 1, 1, 2, 3, 5 },    -1,
-				3
-			);
-	}
-	
-	@Cover(invalidECs = 8, boundaries = 17)
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals5() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 1,
-				new byte[] { 1, 1, 2, 3, 5 },    5,
-				3
-			);
-	}
-	
-	@Cover(invalidECs = 12, boundaries = 20)
-	@Test(expected = IllegalArgumentException.class)
-	public void equals6() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 1,
-				new byte[] { 1, 1, 2, 3, 5 },    2,
-				0
-			);
-	}
-	
-	@Cover(invalidECs = 13, boundaries = {15,24,26})
-	@Test(expected = IllegalArgumentException.class)
-	public void equals7() {
-		ArrayUtil.equals(
-				new byte[] { 1, 1, 2, 3, 5 },    2,
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 1,
-				4
-			);
-	}
-	
-	@Cover(invalidECs = 14, boundaries = 27)
-	@Test(expected = IllegalArgumentException.class)
-	public void equals8() {
-		ArrayUtil.equals(
-				new byte[] { 1, 2, 3, 5, 7, 9 }, 1,
-				new byte[] { 1, 1, 2, 3, 5 },    2,
-				4
-			);
-
-	}
-	
-	@Cover(boundaries = {1,10})
-	@Test
-	public void equals9() {
-		assertTrue(ArrayUtil.equals(null, -1, null, -1, -1));
-	}
-	
-	@Cover(boundaries = {2,11})
-	@Test
-	public void equals10() {
-		assertTrue(ArrayUtil.equals(new byte[0], -1, new byte[0], -1, -1));
-	}
-	
-	@Cover(boundaries = {3,5,7,12,14,16,21,22,28})
-	@Test
-	public void equals11() {
-		assertTrue(!ArrayUtil.equals(new byte[]{1}, 0, new byte[2], 0, 1));
 	}
 	
 	@Cover(boundaries = 9)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals12() {
+	public void testBoundaryEquals1() {
 		ArrayUtil.equals(new byte[]{1,2}, 3, new byte[]{1}, 0, 1);
 	}
 	
 	@Cover(boundaries = 18)
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
-	public void equals13() {
+	public void testBoundaryEquals2() {
 		ArrayUtil.equals(new byte[]{1}, 0, new byte[]{1,2}, 3, 1);
 	}
 	
 	@Cover(boundaries = 19)
 	@Test(expected = IllegalArgumentException.class)
-	public void equals14() {
+	public void testBoundaryEquals3() {
 		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{1,2}, 0, -1);
+		Mockito.anyInt();
 	}
 	
-	@Cover(boundaries = 30)
+	@Cover(boundaries = {21,28})
 	@Test
-	public void equals15() {
-		assertTrue(!ArrayUtil.equals(new byte[]{2,3}, 0, new byte[]{1,2,4}, 1, 2));
+	public void testBoundaryEquals4() {
+		assertTrue(!ArrayUtil.equals(new byte[]{1}, 0, new byte[2], 0, 1));
+	}
+	
+	@Cover(boundaries = 29)
+	@Test
+	public void testBoundaryEquals5() {
+		assertTrue(!ArrayUtil.equals(
+				new byte[] { 1, 10, 20, 30 }, 1,
+				new byte[] { 1, 1, 2, 3, 5 }, 2,
+				2
+			));
 	}
 	
 }

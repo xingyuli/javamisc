@@ -79,40 +79,40 @@ public class InputStreamProviderTest {
 
 	private static int ACTUAL_INVOKE_NUMBER = 0;
 	
+	@Cover(conditions = "StringUtils.isBlank(path)", invalidECs = 2, boundaries = 1)
+	@Test(expected = IllegalArgumentException.class)
+	public void testConditionInputStreamProvider1() throws FileNotFoundException {
+		new InputStreamProvider(null);
+	}
+	
+	@Cover(conditions = "!new File(path).exist()", invalidECs = 6)
+	@Test(expected = FileNotFoundException.class)
+	public void testConditionInputStreamProvider2() throws FileNotFoundException {
+		new InputStreamProvider(FileUtil.ensureNonExistence("tc5.tmp"));
+	}
+	
 	@Cover(validECs = {1,5})
 	@Test
-	public void instantiateInputStreamProvider1() throws FileNotFoundException {
+	public void testECInputStreamProvider1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("tc1.tmp"));
 		assertNotNull(provider);
 	}
 	
-	@Cover(invalidECs = 2, boundaries = 1)
-	@Test(expected = IllegalArgumentException.class)
-	public void instantiateInputStreamProvider2() throws FileNotFoundException {
-		new InputStreamProvider(null);
-	}
-	
 	@Cover(invalidECs = 3, boundaries = 2)
 	@Test(expected = IllegalArgumentException.class)
-	public void instantiateInputStreamProvider3() throws FileNotFoundException {
+	public void testECInputStreamProvider2() throws FileNotFoundException {
 		new InputStreamProvider("");
 	}
 	
 	@Cover(invalidECs = 4, boundaries = 3)
 	@Test(expected = IllegalArgumentException.class)
-	public void instantiateInputStreamProvider4() throws FileNotFoundException {
+	public void testECInputStreamProvider3() throws FileNotFoundException {
 		new InputStreamProvider(" ");
-	}
-	
-	@Cover(invalidECs = 6)
-	@Test(expected = FileNotFoundException.class)
-	public void instantiateInputStreamProvider5() throws FileNotFoundException {
-		new InputStreamProvider(FileUtil.ensureNonExistence("tc5.tmp"));
 	}
 	
 	@Cover(validECs = 1)
 	@Test
-	public void usedBy1() throws FileNotFoundException {
+	public void testECUsedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy1.tmp"));
 		provider.usedBy(new InputStreamUser() {
 			@Override
@@ -124,14 +124,14 @@ public class InputStreamProviderTest {
 	
 	@Cover(invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
-	public void usedBy2() throws FileNotFoundException {
+	public void testECUsedBy2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy2.tmp"));
 		provider.usedBy((InputStreamUser)null);
 	}
 	
 	@Cover(boundaries = 2)
 	@Test
-	public void usedBy3() throws FileNotFoundException {
+	public void testBoundaryUsedBy1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBy3.tmp"));
 		provider.usedBy(new InputStreamUser() {
 			@Override
@@ -144,7 +144,7 @@ public class InputStreamProviderTest {
 
 	@Cover(validECs = 1)
 	@Test
-	public void usedBySeveralUsers1() throws FileNotFoundException {
+	public void testECUsedBySeveralUsers1() throws FileNotFoundException {
 		Collection<RecordableStreamUser> users = new ArrayList<RecordableStreamUser>();
 		users.add(new RecordableStreamUser());
 		users.add(new RecordableStreamUser());
@@ -168,21 +168,21 @@ public class InputStreamProviderTest {
 	
 	@Cover(invalidECs = 2, boundaries = 1)
 	@Test(expected = NullPointerException.class)
-	public void usedBySeveralUsers2() throws FileNotFoundException {
+	public void testECUsedBySeveralUsers2() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers2.tmp"));
 		provider.usedBy((Collection<InputStreamUser>)null);
 	}
 	
 	@Cover(boundaries = 2)
 	@Test
-	public void usedBySeveralUsers3() throws FileNotFoundException {
+	public void testBoundaryUsedBySeveralUsers1() throws FileNotFoundException {
 		InputStreamProvider provider = new InputStreamProvider(FileUtil.ensureExistence("usedBySeveralUsers3.tmp"));
 		provider.usedBy(Collections.<InputStreamUser>emptySet());
 	}
 	
 	@Cover(boundaries = 3)
 	@Test
-	public void usedBySeveralUsers4() throws FileNotFoundException {
+	public void testBoundaryUsedBySeveralUsers2() throws FileNotFoundException {
 		List<InputStreamUser> usersWithNullElements = new ArrayList<InputStreamUser>(16);
 		Collections.fill(usersWithNullElements, null);
 		
