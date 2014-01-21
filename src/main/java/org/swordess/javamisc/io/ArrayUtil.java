@@ -77,7 +77,7 @@ public class ArrayUtil {
 		}
 		
 		for (int i = 0; i < length; i++) {
-			if (!(src[srcOffset + i] == dest[destOffset + i])) {
+			if (src[srcOffset + i] != dest[destOffset + i]) {
 				return false;
 			}
 		}

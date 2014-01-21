@@ -88,6 +88,104 @@ import org.swordess.javamisc.TestCaseAnalysis;
 })
 public class ArrayUtilTest {
 	
+	@Cover(conditions = {"src = null", "dest = null"})
+	@Test
+	public void testConditionEquals1() {
+		assertTrue(ArrayUtil.equals(null, -1, null, -1, -1));
+	}
+	
+	@Cover(conditions = {"src = null", "dest = any"})
+	@Test
+	public void testConditionEquals2() {
+		assertTrue(!ArrayUtil.equals(null, -1, new byte[0], -1, -1));
+	}
+	
+	@Cover(conditions = {"src = any not null", "dest = null"})
+	@Test
+	public void testConditionEquals3() {
+		assertTrue(!ArrayUtil.equals(new byte[0], -1, null, -1, -1));
+	}
+	
+	@Cover(conditions = {"src.length = 0", "dest.length = 0"})
+	@Test
+	public void testConditionEquals4() {
+		assertTrue(ArrayUtil.equals(new byte[0], -1, new byte[0], -1, -1));
+	}
+	
+	@Cover(conditions = {"src.length = 0", "dest.length > 0"})
+	@Test
+	public void testConditionEquals5() {
+		assertTrue(!ArrayUtil.equals(new byte[0], -1, new byte[]{1}, 0, 1));
+	}
+	
+	@Cover(conditions = {"src.length > 0", "dest.length = 0"})
+	@Test
+	public void testConditionEquals6() {
+		assertTrue(!ArrayUtil.equals(new byte[]{1}, -1, new byte[0], 0, 1));
+	}
+	
+	@Cover(conditions = "srcOffset < 0")
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void testConditionEquals7() {
+		ArrayUtil.equals(new byte[]{1}, -1, new byte[]{2}, 0, 1);
+	}
+	
+	@Cover(conditions = "srcOffset >= src.length")
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void testConditionEquals8() {
+		ArrayUtil.equals(new byte[]{1}, 1, new byte[]{2}, 0, 1);
+	}
+	
+	@Cover(conditions = "destOffset < 0")
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void testConditionEquals9() {
+		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, -1, 1);
+	}
+	
+	@Cover(conditions = "destOffset >= dest.length")
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void testConditionEquals10() {
+		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 2, 1);
+	}
+	
+	@Cover(conditions = "length <= 0")
+	@Test(expected = IllegalArgumentException.class)
+	public void testConditionEquals11() {
+		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1}, 0, 0);
+	}
+	
+	@Cover(conditions = "srcOffset + length > src.length")
+	@Test(expected = IllegalArgumentException.class)
+	public void testConditionEquals12() {
+		ArrayUtil.equals(new byte[]{2}, 0, new byte[]{1,2}, 0, 2);
+	}
+	
+	@Cover(conditions = "destOffset + length > dest.length")
+	@Test(expected = IllegalArgumentException.class)
+	public void testConditionEquals13() {
+		ArrayUtil.equals(new byte[]{1,2}, 0, new byte[]{1}, 0, 2);
+	}
+	
+	@Cover(conditions = "src[i] != dest[i]")
+	@Test
+	public void testConditionEquals14() {
+		assertTrue(!ArrayUtil.equals(
+				new byte[]{1,1,2,3,5,8}, 1,
+				new byte[]{1,2,3,5,7,9,11}, 0,
+				5
+			));
+	}
+	
+	@Cover(conditions = "src[any] = dest[any]")
+	@Test
+	public void testConditionEquals15() {
+		assertTrue(ArrayUtil.equals(
+				new byte[]{1,3,5,7,9}, 1,
+				new byte[]{1,2,3,5,7,9,11}, 2,
+				4
+			));
+	}
+	
 	@Cover(validECs = {1,2,5,6,9,10,11}, boundaries = {6,25,29})
 	@Test
 	public void equals1() {

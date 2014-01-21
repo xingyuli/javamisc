@@ -8,7 +8,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.METHOD)
 public @interface Cover {
+	
 	public int[] validECs() default {};
 	public int[] invalidECs() default {};
+	
 	public int[] boundaries() default {};
+	
+	public String[] conditions() default {};
+	
 }
