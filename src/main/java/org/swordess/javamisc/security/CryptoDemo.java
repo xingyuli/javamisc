@@ -24,13 +24,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.junit.Test;
-
-public class CryptoTest {
+public class CryptoDemo {
 
 	/* symmetric encryption */
 	
-	@Test
 	public void encrypt() {
 		try {
 			KeyGenerator generator = KeyGenerator.getInstance("DES");
@@ -62,7 +59,6 @@ public class CryptoTest {
 		}
 	}
 	
-	@Test
 	public void decrypt() {
 		try {
 			// first we need to read the secret key back
@@ -94,7 +90,6 @@ public class CryptoTest {
 	
 	/* asymmetric encryption */
 	
-	@Test
 	public void asymmetricEncryption() {
 		try {
 			Signature signatureForSign = Signature.getInstance("SHA1withDSA");
@@ -134,7 +129,7 @@ public class CryptoTest {
 	}
 	
 	private static void saveFile(String filename, byte[] data) throws IOException {
-		String filepath = CryptoTest.class.getResource("").getPath() + filename;
+		String filepath = CryptoDemo.class.getResource("").getPath() + filename;
 		File outFile = new File(filepath);
 		if (outFile.exists()) {
 			outFile.delete();
@@ -154,7 +149,7 @@ public class CryptoTest {
 	}
 	
 	private static byte[] readFile(String filename) throws IOException {
-		String filepath = CryptoTest.class.getResource("").getPath() + filename;
+		String filepath = CryptoDemo.class.getResource("").getPath() + filename;
 		File inFile = new File(filepath);
 		if (!inFile.exists()) {
 			return new byte[0];

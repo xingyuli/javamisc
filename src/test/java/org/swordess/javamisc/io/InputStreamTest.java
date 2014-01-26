@@ -21,7 +21,7 @@ import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
  * 
  * @author Liu Xingyu <xingyulliiuu@gmail.com>
  */
-@Ignore
+@Ignore("Out of date since thesetest cases in very poor...")
 public class InputStreamTest {
 
 	@Test

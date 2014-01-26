@@ -8,18 +8,14 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-import org.junit.Test;
+public class CharsetDemo {
 
-public class CharsetTest {
-
-	@Test
 	public void printDefaultCharset() {
 		System.getProperties().list(System.out);
 		System.out.println(Charset.defaultCharset());
 	}
 	
-	@Test
-	public void testEncodeAndDecode() {
+	public void encodeAndDecode() {
 		Charset charset = Charset.forName("ISO-8859-1");
 		
 		CharsetEncoder encoder = charset.newEncoder();

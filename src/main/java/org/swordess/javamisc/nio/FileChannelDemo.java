@@ -14,16 +14,13 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Arrays;
 
-import org.junit.Test;
+public class FileChannelDemo {
 
-public class FileChannelTest {
-
-	@Test
-	public void testRead() {
+	public void read() {
 		FileInputStream inStream = null;
 		
 		try {
-			String path = FileChannelTest.class.getResource("data/nio-data-read.txt").getPath();
+			String path = FileChannelDemo.class.getResource("data/nio-data-read.txt").getPath();
 			inStream = new FileInputStream(path);
 			
 			FileChannel inChannel = inStream.getChannel();
@@ -59,9 +56,8 @@ public class FileChannelTest {
 		}
 	}
 	
-	@Test
-	public void testReadWhenIKnowMoreAboutBufferAndChannel() {
-		String path = FileChannelTest.class.getResource("").getPath() + "data/nio-data-read.txt";
+	public void readWhenIKnowMoreAboutBufferAndChannel() {
+		String path = FileChannelDemo.class.getResource("").getPath() + "data/nio-data-read.txt";
 		
 		FileInputStream inStream = null;
 		try {
@@ -94,9 +90,8 @@ public class FileChannelTest {
 		}
 	}
 	
-	@Test
-	public void testWrite() {
-		String path = FileChannelTest.class.getResource("").getPath() + "data/nio-data-write.txt";
+	public void write() {
+		String path = FileChannelDemo.class.getResource("").getPath() + "data/nio-data-write.txt";
 		File f = new File(path);
 		if (f.exists()) {
 			f.delete();
@@ -132,7 +127,6 @@ public class FileChannelTest {
 		}
 	}
 	
-	@Test
 	public void viaWebAccess() throws IOException {
 		try {
 			URL url = new URL("http://www.baidu.com");
@@ -142,7 +136,7 @@ public class FileChannelTest {
 				input = url.openStream();
 				ReadableByteChannel readChannel = Channels.newChannel(input);
 				
-				String outputPath = FileChannelTest.class.getResource("").getPath() + "data/baidu.html";
+				String outputPath = FileChannelDemo.class.getResource("").getPath() + "data/baidu.html";
 				File outFile = new File(outputPath);
 				if (outFile.exists()) {
 					outFile.delete();

@@ -3,7 +3,7 @@ package org.swordess.javamisc.interrupt;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class TestStop {
+public class StopDemo {
 
 	private static final int[] array = new int[80000];
 	

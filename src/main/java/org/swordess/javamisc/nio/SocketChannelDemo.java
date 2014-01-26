@@ -12,18 +12,10 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
-import org.junit.Test;
+public class SocketChannelDemo {
 
-public class SocketChannelTest {
-
-	@Test
-	public void testMultiplexedIO() throws InterruptedException, ExecutionException {
-		Executors.newSingleThreadExecutor().submit(new IOWorker()).get();
-	}
-	
 	private static class IOWorker implements Runnable {
 
 		@Override
@@ -81,6 +73,10 @@ public class SocketChannelTest {
 			}
 		}
 		
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Executors.newSingleThreadExecutor().submit(new IOWorker()).get();
 	}
 	
 }

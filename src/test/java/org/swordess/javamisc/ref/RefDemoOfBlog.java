@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 
 import static junit.framework.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -20,6 +21,7 @@ import org.junit.Test;
  * This is a demonstration on Oracle(Sun)'s JVM implementation which means
  * might not work for some other JVM implementors.
  */
+@Ignore("This is not a real test!")
 public class RefDemoOfBlog {
 
 	/**

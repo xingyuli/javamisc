@@ -2,11 +2,8 @@ package org.swordess.javamisc.nio;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Test;
+public class BufferDemo {
 
-public class BufferTest {
-
-	@Test
 	public void byteBuffer() {
 		ByteBuffer buff = ByteBuffer.allocate(8);
 		
@@ -19,6 +16,10 @@ public class BufferTest {
 		
 		int data = buff.getInt();
 		System.out.println(Integer.toHexString(data));
+	}
+	
+	public static void main(String[] args) {
+		new BufferDemo().byteBuffer();
 	}
 	
 }

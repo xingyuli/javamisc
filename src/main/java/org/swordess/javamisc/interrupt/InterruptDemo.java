@@ -7,7 +7,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 
-public class TestInterrupt {
+public class InterruptDemo {
 
 	public static void main(String[] args) {
 		ExecutorService es = Executors.newSingleThreadExecutor();

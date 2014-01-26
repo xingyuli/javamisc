@@ -2,12 +2,9 @@ package org.swordess.javamisc.nio.tutorial;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Test;
-
 public class BufferUsage {
 
-	@Test
-	public void testWrap() {
+	public void wrap() {
 		byte[] internal = "Hello World!".getBytes();
 		
 		// will share the same underlying data array
@@ -18,8 +15,7 @@ public class BufferUsage {
 		System.out.println(new String(buffer.array()));
 	}
 	
-	@Test
-	public void testSlice() {
+	public void slice() {
 		// will produce 8 bytes
 		byte[] data = "Java NIO".getBytes();
 		

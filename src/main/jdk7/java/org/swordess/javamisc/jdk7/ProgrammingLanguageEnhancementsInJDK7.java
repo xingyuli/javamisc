@@ -1,14 +1,9 @@
 package org.swordess.javamisc.jdk7;
 
-
-import static junit.framework.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.junit.Test;
 
 /**
  * Simple demonstrations of programming language enhancements introduced by
@@ -16,22 +11,19 @@ import org.junit.Test;
  */
 public class ProgrammingLanguageEnhancementsInJDK7 {
 	
-	@Test
 	public void binaryLiterals() {
+		// b == 5
 		byte b = 0b101;
-		assertTrue(b == 5);
-		
+
+		// i == -13
 		int i = -0b1101;
-		assertTrue(i == -13);
 	}
 
-	@Test
 	public void underscoresInNumericLiterals() {
 		long num = 135_0001_0002L;
 		System.out.println(num);
 	}
 	
-	@Test
 	public void stringsInSwitchStatements() {
 		String var = "TWO";
 		switch (var) {
@@ -42,7 +34,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		}
 	}
 	
-	@Test
 	public void typeInferenceForGenericInstanceCreation() {
 		// diamond
 		List<Map<String, String>> list = new ArrayList<>();
@@ -56,7 +47,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		System.out.println(list);
 	}
 	
-	@Test
 	public void tryWithOneResource() {
 		try (MyResource resource = new MyResource("JDK7")) {
 			resource.data.put("Orz", "^_^");
@@ -64,7 +54,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		}
 	}
 
-	@Test
 	public void tryWithSeveralResources() {
 		/*
 		 * Note that the close methods of resources are called in the opposite
@@ -84,7 +73,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		}
 	}
 	
-	@Test
 	public void tryWithResourcesCanStillHaveCatchAndFinallyBlock() {
 		/*
 		 * NOTE: A try-with-resources statement can have catch and finally
@@ -103,7 +91,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		}
 	}
 	
-	@Test
 	public void tryPriorToJDK7() {
 		MyResource resource = null;
 		try {
@@ -117,7 +104,6 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		}
 	}
 	
-	@Test
 	public void catchMultipleExceptionTypes() {
 		try {
 			throwNullPointerException("dummy null");

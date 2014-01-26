@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -41,6 +42,7 @@ import org.junit.Test;
  * "strong" reference is: if you can follow a chain of references from a root to
  * a particular object, then that object is "strongly" referenced.
  */
+@Ignore("This is not a real test!")
 public class RefDemoOfMine {
 
 	@Test

@@ -1,11 +1,15 @@
 package org.swordess.javamisc.ref;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
+import org.junit.Ignore;
 import org.junit.Test;
-import static junit.framework.Assert.*;
 
+@Ignore("This is not a real test!")
 public class WeakReferenceTest {
 
 	@Test

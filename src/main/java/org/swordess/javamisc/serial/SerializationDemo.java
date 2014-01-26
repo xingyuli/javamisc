@@ -10,13 +10,10 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
 
-import org.junit.Test;
+public class SerializationDemo {
 
-public class SerializationTest {
-
-	@Test
 	public void serialization() {
-		String path = SerializationTest.class.getResource("").getPath() + "user.bin";
+		String path = SerializationDemo.class.getResource("").getPath() + "user.bin";
 		ObjectOutputStream output = null;
 		try {
 			File outFile = new File(path);
@@ -41,9 +38,8 @@ public class SerializationTest {
 		}
 	}
 	
-	@Test
 	public void deserialization() {
-		String path = SerializationTest.class.getResource("").getPath() + "user.bin";
+		String path = SerializationDemo.class.getResource("").getPath() + "user.bin";
 		ObjectInputStream input = null;
 		try {
 			input = new ObjectInputStream(new FileInputStream(path));

@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("This is not a real test!")
 public class PowerOfRef {
 
 	@Test
