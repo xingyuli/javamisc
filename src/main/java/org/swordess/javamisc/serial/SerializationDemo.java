@@ -75,10 +75,12 @@ public class SerializationDemo {
 			this.lastname = lastname;
 		}
 
+		@SuppressWarnings("unused")
 		public String getFirstname() {
 			return firstname;
 		}
 
+		@SuppressWarnings("unused")
 		public String getLastname() {
 			return lastname;
 		}

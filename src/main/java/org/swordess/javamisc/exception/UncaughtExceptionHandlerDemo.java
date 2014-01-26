@@ -2,7 +2,7 @@ package org.swordess.javamisc.exception;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
-public class DemoUncaughtExceptionHandler {
+public class UncaughtExceptionHandlerDemo {
 
 	private static class MyHandler implements UncaughtExceptionHandler {
 		public void uncaughtException(Thread t, Throwable e) {

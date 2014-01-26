@@ -97,6 +97,7 @@ public class RefDemoOfMine {
 			public void run() {
 				try {
 					System.out.println("Awaiting for GC");
+					@SuppressWarnings("unchecked")
 					PhantomReference<Stuff> ref = (PhantomReference<Stuff>) queue.remove();
 					System.out.println(ref);
 					System.out.println("Stuff has been enqueued!");
@@ -262,6 +263,7 @@ public class RefDemoOfMine {
 		
 	}
 	
+	@SuppressWarnings("serial")
 	private static class TooManyResultsException extends Exception {
 
 		TooManyResultsException(int count) {

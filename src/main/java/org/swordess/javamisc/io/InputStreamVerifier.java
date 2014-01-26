@@ -32,7 +32,7 @@ public class InputStreamVerifier implements InputStreamProvider.InputStreamUser 
 		int offset = 0;
 		int bytesRead = -1;
 		while (-1 != (bytesRead = in.read(buf, 0, buf.length))) {
-			if (!ArrayUtil.equals(expectedData, offset, buf, 0, bytesRead)) {
+			if (!ArrayUtils.equals(expectedData, offset, buf, 0, bytesRead)) {
 				match = false;
 				return;
 			}

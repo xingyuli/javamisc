@@ -89,6 +89,7 @@ public class RefDemoOfBlog {
 				try {
 					System.out.println("Awaiting for GC");
 					// This will block till it is GCd
+					@SuppressWarnings("unchecked")
 					PhantomReference<Object> ref = (PhantomReference<Object>) queue.remove();
 					System.out.println(ref);
 					System.out.println("Referenced GC'd");

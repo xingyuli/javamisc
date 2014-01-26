@@ -14,14 +14,8 @@ import org.junit.Test;
 import org.swordess.javamisc.io.InputStreamProvider;
 import org.swordess.javamisc.io.InputStreamProvider.InputStreamUser;
 
-/**
- * This group of tests is useless because we've already have more powerful
- * {@link InputStreamProviderTest} and {@link InputStreamVerifierTest} are
- * available.
- * 
- * @author Liu Xingyu <xingyulliiuu@gmail.com>
- */
-@Ignore("Out of date since thesetest cases in very poor...")
+
+@Ignore("Out of dated since these test cases are very poor..., thus cannot be used as real test!")
 public class InputStreamTest {
 
 	@Test

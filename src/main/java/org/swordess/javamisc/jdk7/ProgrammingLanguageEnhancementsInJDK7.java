@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public class ProgrammingLanguageEnhancementsInJDK7 {
 	
+	/*
+	 * can be safely ignored as they are only demonstrations of using binary
+	 * literals
+	 */
+	@SuppressWarnings("unused")
 	public void binaryLiterals() {
 		// b == 5
 		byte b = 0b101;
@@ -132,7 +137,10 @@ public class ProgrammingLanguageEnhancementsInJDK7 {
 		throw new IllegalArgumentException(msg);
 	}
 	
+	@SuppressWarnings("serial")
 	static class FirstException extends Exception {}
+	
+	@SuppressWarnings("serial")
 	static class SecondException extends Exception {}
 	
 	static class MyResource implements AutoCloseable {

@@ -1,6 +1,6 @@
 package org.swordess.javamisc.io;
 
-public class ArrayUtil {
+public class ArrayUtils {
 
 	/**
 	 * Compare the equality of the provided <code>src</code> byte array and
@@ -84,7 +84,7 @@ public class ArrayUtil {
 		return true;
 	}
 	
-	private ArrayUtil() {
+	private ArrayUtils() {
 	}
 	
 }
