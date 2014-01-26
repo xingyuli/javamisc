@@ -56,6 +56,7 @@ public class CheckForPrimeTest {
 		}
 	}
 	
+	// Test case 6
 	@Test
 	public void testCheckPrime_checkArgs_2_inputs() {
 		try {
@@ -67,6 +68,7 @@ public class CheckForPrimeTest {
 		}
 	}
 	
+	// Test case 8
 	@Test
 	public void testCheckPrime_checkArgs_0_inputs() {
 		try {
