@@ -133,7 +133,10 @@ public class RefDemoOfMine {
 				new SoftReference<List<Stuff>>(new LinkedList<Stuff>());
 
 		for (int i = 0; i < 5; i++) {
-			ref.get().add(new Stuff("demo1-" + i));
+			List<Stuff> referent = ref.get();
+			if (null != referent) {
+				referent.add(new Stuff("demo1-" + i));
+			}
 		}
 		
 		/*

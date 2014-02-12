@@ -20,8 +20,9 @@ public class PowerOfRef {
 		
 		int i = 0;
 		while (true) {
-			if (weakRef.get() != null) {
-				weakRef.get().put(i++, "test" + i);
+			Map<Integer, String> strongRef = weakRef.get();
+			if (strongRef != null) {
+				strongRef.put(i++, "test" + i);
 				System.out.println(i + " im still working!!!");
 			} else {
 				System.out.println("******* im free *******");
