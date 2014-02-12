@@ -1,4 +1,4 @@
-package org.swordess.toy.javamisc.concurrent.nonblocking;
+package org.swordess.toy.javamisc.ibmdevworks.jtp.nonblocking;
 
 import java.util.concurrent.CountDownLatch;
 
