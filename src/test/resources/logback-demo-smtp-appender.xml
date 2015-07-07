@@ -1,0 +1,22 @@
+<included>
+
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>smtp.exmail.qq.com</smtpHost>
+        <smtpPort>465</smtpPort>
+        <SSL>true</SSL>
+
+        <!-- email still not sent out :( -->
+
+        <asynchronousSending>false</asynchronousSending>
+
+        <to>xingyu_liu@qq.com</to>
+        <from>xingyu.liu@mobisist.com</from>
+        <subject>Swordess Toy - Test SMTPAppender</subject>
+        <layout class="ch.qos.logback.classic.html.HTMLLayout" />
+    </appender>
+
+    <logger name="org.swordess.toy.javamisc.slf4j.logback.chapters.appenders.SMTPAppenderTest" level="DEBUG">
+        <appender-ref ref="EMAIL" />
+    </logger>
+
+</included>

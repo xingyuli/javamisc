@@ -1,4 +1,4 @@
-package org.swordess.toy.javamisc.slf4j;
+package org.swordess.toy.javamisc.slf4j.logback;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.util.StatusPrinter;
@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LogbackDemo {
-
-    private final Logger logger = LoggerFactory.getLogger(LogbackDemo.class);
 
     @Test
     public void test_Chapter1_PrintLoggerStatus() {
