@@ -1,14 +1,10 @@
 package org.swordess.toy.javamisc.springdata.jpa.model;
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
 public class Scoped {
-
-    public static final String PROPERTY_SCOPE_NAME = "scopeName";
-    public static final String PROPERTY_SCOPE_VALUE = "scopeValue";
 
     public enum Scope {
 
@@ -29,7 +25,6 @@ public class Scoped {
     private String scopeName;
     private String scopeValue;
 
-    @Column(name = PROPERTY_SCOPE_NAME)
     public String getScopeName() {
         return scopeName;
     }
@@ -38,7 +33,6 @@ public class Scoped {
         this.scopeName = scopeName;
     }
 
-    @Column(name = PROPERTY_SCOPE_VALUE)
     public String getScopeValue() {
         return scopeValue;
     }
