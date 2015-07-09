@@ -1,12 +1,8 @@
 package org.swordess.toy.javamisc.springdata.jpa;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import org.swordess.toy.javamisc.springdata.jpa.model.Employee;
 import org.swordess.toy.javamisc.springdata.jpa.model.Scoped.Scope;
 import org.swordess.toy.javamisc.springdata.jpa.repositories.EmployeeRepository;
@@ -18,10 +14,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 import static org.swordess.toy.javamisc.springdata.jpa.Specs.hasScope;
 import static org.swordess.toy.javamisc.springdata.jpa.repositories.EmployeeRepository.Specs.olderThan;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:org/swordess/toy/javamisc/springdata/jpa/applicationContext.xml")
-@Transactional
-public class SpecificationTest {
+public class SpecificationTest extends SpringDataJPAUnitTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;

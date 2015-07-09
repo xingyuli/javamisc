@@ -34,4 +34,8 @@
 
     <jpa:repositories base-package="org.swordess.toy.javamisc.springdata.jpa.repositories" />
 
+    <bean id="crmService" class="org.swordess.toy.javamisc.springdata.jpa.service.impl.CRMServiceImpl">
+        <property name="employeeRepository" ref="employeeRepository" />
+    </bean>
+
 </beans>
