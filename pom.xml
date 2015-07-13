@@ -21,9 +21,12 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <!-- both Hibernate JPA modelgen and lombok meet the Java Service Provider contract -->
+                    <!--
                     <compilerArguments>
-                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor,lombok.launch.AnnotationProcessorHider$AnnotationProcessor</processor>
                     </compilerArguments>
+                    -->
                 </configuration>
             </plugin>
         </plugins>
@@ -126,6 +129,14 @@
             <artifactId>spring-test</artifactId>
             <version>4.1.6.RELEASE</version>
             <scope>test</scope>
+        </dependency>
+
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.4</version>
         </dependency>
 
 
