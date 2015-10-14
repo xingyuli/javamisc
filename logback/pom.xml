@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>org.swordess.toy.javamisc</groupId>
+    <artifactId>logback</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.swordess.toy</groupId>
+        <artifactId>swordess-toy-javamisc</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <!-- transitive dependency -->
+        <!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        -->
+        <!--
+            Binding for Simple implementation, which outputs all events to System.err. Only messages of level INFO and
+            higher are printed. This binding may be useful in the context of small applications.
+        -->
+        <!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        -->
+        <!--
+            There are also SLF4J bindings external to the SLF4J project, e.g. logback which implements SLF4J natively.
+            Logback's ch.qos.logback.classic.Logger class is a direct implementation of SLF4J's org.slf4j.Logger
+            interface. Thus, using SLF4J in conjunction with logback involves strictly zero memory and computational
+            overhead.
+        -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+
+        <!-- used by logback SMTPAppender -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
